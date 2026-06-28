@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="page">
+    <div class="container">
+        <div class="delete-card">
+            <span class="badge-soft">Payment successful</span>
+            <h1>You bought {{ listing.title }}.</h1>
+            <p>Your payment was successful. This listing is now marked as sold.</p>
+
+            <div class="delete-actions">
+                <a href="{% url 'listing_list' %}" class="btn primary-btn">Browse more</a>
+                <a href="{% url 'listing_detail' listing.id %}" class="btn secondary-btn">View listing</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

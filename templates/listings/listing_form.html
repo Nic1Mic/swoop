@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<section class="page">
+    <div class="container">
+
+        <div class="form-header">
+            <span class="badge-soft">Start selling</span>
+            <h1>Sell an item on Swoop.</h1>
+            <p>Create a clean, detailed listing so buyers can swoop it quickly.</p>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data" class="sell-form">
+            {% csrf_token %}
+
+            <div class="form-layout">
+
+                <section class="upload-card">
+                    <label class="upload-box" for="{{ form.image.id_for_label }}">
+                        <i class="bi bi-cloud-arrow-up"></i>
+                        <h3>Upload product photo</h3>
+                        <p>Click to choose an image. Preview appears below.</p>
+                        {{ form.image }}
+                    </label>
+
+                    <div class="preview-box" id="previewBox">
+                        <p>No image selected yet</p>
+                    </div>
+                </section>
+
+                <section class="form-card">
+                    <label for="{{ form.title.id_for_label }}">Item title</label>
+                    {{ form.title }}
+
+                    <label for="{{ form.description.id_for_label }}">Description</label>
+                    {{ form.description }}
+
+                    <label for="{{ form.category.id_for_label }}">Category</label>
+                    {{ form.category }}
+
+                    <label for="{{ form.condition.id_for_label }}">Condition</label>
+                    {{ form.condition }}
+
+                    <div class="two-columns">
+                        <div>
+                            <label for="{{ form.price.id_for_label }}">Price (£)</label>
+                            {{ form.price }}
+                        </div>
+
+                        <div>
+                            <label for="{{ form.location.id_for_label }}">Location</label>
+                            {{ form.location }}
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn primary-btn w-100">
+                        Publish Listing
+                    </button>
+                </section>
+
+            </div>
+        </form>
+
+    </div>
+</section>
+
+{% endblock %}

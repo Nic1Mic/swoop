@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="page">
+    <div class="container">
+        <div class="delete-card">
+            <span class="badge-soft">Payment successful</span>
+            <h1>{{ listing.title }} is now featured.</h1>
+            <p>Your listing will appear higher on Swoop with a Featured badge.</p>
+
+            <div class="delete-actions">
+                <a href="{% url 'dashboard' %}" class="btn primary-btn">Back to dashboard</a>
+                <a href="{% url 'listing_detail' listing.id %}" class="btn secondary-btn">View listing</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

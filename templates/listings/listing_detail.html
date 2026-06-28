@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<section class="page">
+    <div class="container">
+
+        <a href="{% url 'listing_list' %}" class="back-link">
+            <i class="bi bi-arrow-left"></i> Back to listings
+        </a>
+
+        <div class="detail-layout">
+            <section class="detail-gallery">
+                {% if listing.image %}
+<img src="{{ listing.image.url }}" class="detail-main-photo" alt="{{ listing.title }}">
+{% else %}
+<div class="detail-main-image laptop"></div>
+{% endif %}
+
+                <div class="thumbnail-row">
+                    <div class="thumbnail laptop active"></div>
+                    <div class="thumbnail gaming"></div>
+                    <div class="thumbnail camera"></div>
+                    <div class="thumbnail sofa"></div>
+                </div>
+            </section>
+
+            <aside class="detail-panel">
+
+                {% if listing.is_featured %}
+                    <span class="featured">Featured</span>
+                {% endif %}
+
+                <h1>{{ listing.title }}</h1>
+
+                <div class="rating-row">
+                    <span>★★★★★</span>
+                    <p>Seller listing</p>
+                </div>
+
+                <h2>£{{ listing.price }}</h2>
+
+                <p class="detail-description">
+                    {{ listing.description }}
+                </p>
+
+                <div class="detail-meta">
+                    <div>
+                        <strong>Condition</strong>
+                        <span>{{ listing.get_condition_display }}</span>
+                    </div>
+
+                    <div>
+                        <strong>Category</strong>
+                        <span>{{ listing.category.name }}</span>
+                    </div>
+
+                    <div>
+                        <strong>Location</strong>
+                        <span>{{ listing.location }}</span>
+                    </div>
+
+                    <div>
+                        <strong>Posted</strong>
+                        <span>{{ listing.created_at|timesince }} ago</span>
+                    </div>
+                </div>
+
+                <div class="seller-box">
+                    <div class="avatar">
+                        {{ listing.seller.username|first|upper }}
+                    </div>
+
+                    <div>
+                        <a href="{% url 'seller_profile' listing.seller.username %}"><strong>{{ listing.seller.username }}</strong></a>
+                        <p>Member of Swoop</p>
+                    </div>
+                </div>
+
+                <div class="detail-actions">
+                    {% if listing.is_sold %}
+                        <button class="btn secondary-btn w-100" disabled>Sold</button>
+                    {% elif listing.seller == request.user %}
+                        <a href="{% url 'dashboard' %}" class="btn secondary-btn w-100">Manage listing</a>
+                    {% else %}
+                        <a href="{% url 'buy_listing' listing.id %}" class="btn primary-btn w-100">Buy now</a>
+                    {% endif %}
+                    <form method="POST" action="{% url 'toggle_wishlist' listing.id %}">
+                        {% csrf_token %}
+                        <button class="btn secondary-btn w-100" type="submit">
+                            <i class="bi bi-heart"></i> Save item
+                        </button>
+                    </form>
+                </div>
+            </aside>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

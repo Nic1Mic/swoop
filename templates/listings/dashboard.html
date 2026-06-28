@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<section class="page">
+    <div class="container">
+
+        <div class="dashboard-header">
+            <div>
+                <span class="badge-soft">Seller dashboard</span>
+                <h1>Welcome back, {{ request.user.username }}.</h1>
+                <p>Manage your listings, track visibility, and promote your items.</p>
+            </div>
+
+            <a href="{% url 'listing_create' %}" class="btn primary-btn">
+                Sell new item
+            </a>
+        </div>
+
+        <section class="dashboard-stats">
+            <div>
+                <h3>{{ my_listings.count }}</h3>
+                <p>Total listings</p>
+            </div>
+
+            <div>
+                <h3>{{ sold_count }}</h3>
+                <p>Sold items</p>
+            </div>
+
+            <div>
+                <h3>{{ featured_count }}</h3>
+                <p>Featured listings</p>
+            </div>
+        </section>
+
+        <div class="section-title">
+            <h2>My listings</h2>
+        </div>
+
+        <section class="dashboard-listings">
+            {% for listing in my_listings %}
+                <div class="dashboard-listing-card">
+                    {% if listing.image %}
+<img src="{{ listing.image.url }}" class="dashboard-listing-img" alt="{{ listing.title }}">
+{% else %}
+<div class="dashboard-listing-img laptop"></div>
+{% endif %}
+
+                    <div class="dashboard-listing-info">
+                        <h3>
+                            {{ listing.title }}
+                            {% if listing.is_sold %}
+                                <span class="mini-sold">Sold</span>
+                            {% elif listing.is_featured %}
+                                <span class="mini-featured">Featured</span>
+                            {% endif %}
+                        </h3>
+                        <p>£{{ listing.price }} · {{ listing.location }}</p>
+                        <small>{{ listing.created_at|timesince }} ago</small>
+                    </div>
+
+                    <div class="dashboard-actions">
+                        <a href="{% url 'listing_detail' listing.id %}" class="btn secondary-btn">
+                            View
+                        </a>
+
+                        <a href="{% url 'listing_edit' listing.id %}" class="btn secondary-btn">
+                            Edit
+                        </a>
+
+                        {% if listing.is_featured %}
+                            <button class="btn secondary-btn" disabled>
+                                Featured
+                            </button>
+                        {% else %}
+                            <a href="{% url 'promote_listing' listing.id %}" class="btn primary-btn">
+                                Promote
+                            </a>
+                        {% endif %}
+
+                        <a href="{% url 'listing_delete' listing.id %}" class="btn danger-btn">
+                            Delete
+                        </a>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="empty-state">
+                    <h2>No listings yet.</h2>
+                    <p>Create your first listing and start selling on Swoop.</p>
+                    <a href="{% url 'listing_create' %}" class="btn primary-btn">Sell an item</a>
+                </div>
+            {% endfor %}
+        </section>
+
+    </div>
+</section>
+
+{% endblock %}

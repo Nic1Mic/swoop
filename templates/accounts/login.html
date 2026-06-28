@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="page">
+    <div class="container">
+        <div class="delete-card">
+            <span class="badge-soft">Welcome back</span>
+            <h1>Log in to Swoop.</h1>
+
+            {% if error %}
+                <p style="color:#EF4444;font-weight:800;">{{ error }}</p>
+            {% endif %}
+
+            <form method="POST" class="form-card" style="box-shadow:none;border:none;padding:0;">
+                {% csrf_token %}
+
+                <label>Username</label>
+                <input type="text" name="username" required>
+
+                <label>Password</label>
+                <input type="password" name="password" required>
+
+                <button type="submit" class="btn primary-btn w-100">Log in</button>
+            </form>
+
+            <p style="margin-top:20px;">
+                New to Swoop?
+                <a href="{% url 'register' %}">Create an account</a>
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %}

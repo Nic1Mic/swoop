@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<section class="page">
+    <div class="container">
+
+        <div class="delete-card">
+            <span class="badge-soft">Delete listing</span>
+
+            <h1>Delete "{{ listing.title }}"?</h1>
+
+            <p>
+                This action cannot be undone. Your listing will be permanently removed from Swoop.
+            </p>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="delete-actions">
+                    <a href="{% url 'dashboard' %}" class="btn secondary-btn">
+                        Cancel
+                    </a>
+
+                    <button type="submit" class="btn danger-btn">
+                        Delete listing
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="page">
+    <div class="container">
+        <div class="delete-card">
+            <span class="badge-soft">Join Swoop</span>
+            <h1>Create your account.</h1>
+
+            <form method="POST" class="form-card" style="box-shadow:none;border:none;padding:0;">
+                {% csrf_token %}
+
+                <label>Username</label>
+                {{ form.username }}
+
+                <label>Password</label>
+                {{ form.password1 }}
+
+                <label>Confirm password</label>
+                {{ form.password2 }}
+
+                <button type="submit" class="btn primary-btn w-100">Create account</button>
+            </form>
+
+            <p style="margin-top:20px;">
+                Already have an account?
+                <a href="{% url 'login' %}">Log in</a>
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %}

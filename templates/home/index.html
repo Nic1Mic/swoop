@@ -1,0 +1,229 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<section class="page">
+    <div class="container">
+
+        <section class="hero hero-upgraded">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6">
+                    <span class="badge-soft">
+                        <i class="bi bi-fire"></i> Local marketplace
+                    </span>
+
+                    <h1>
+                        Find it.<br>
+                        Buy it.<br>
+                        <span>Swoop it.</span>
+                    </h1>
+
+                    <p>
+                        Buy and sell amazing items from people near you.
+                        Discover hidden gems, everyday essentials, and local deals.
+                    </p>
+
+                    <form method="GET" action="{% url 'listing_list' %}" class="hero-search">
+                        <i class="bi bi-search"></i>
+                        <input type="text" name="q" placeholder="Search products, brands, categories...">
+                        <button type="submit">Search</button>
+                    </form>
+
+                    <div class="hero-buttons">
+                        <a href="{% url 'listing_list' %}" class="btn primary-btn">Browse items</a>
+                        <a href="{% url 'listing_create' %}" class="btn secondary-btn">Sell</a>
+                    </div>
+
+                    <div class="trust-row">
+                        <span><i class="bi bi-star-fill"></i> Trusted sellers</span>
+                        <span><i class="bi bi-credit-card"></i> Stripe payments</span>
+                        <span><i class="bi bi-geo-alt"></i> Local pickup</span>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="floating-market">
+                        <div class="floating-product laptop-float">
+                            <div class="float-img laptop"></div>
+                            <div>
+                                <strong>MacBook Air</strong>
+                                <p>£750</p>
+                            </div>
+                            <button><i class="bi bi-heart"></i></button>
+                        </div>
+
+                        <div class="floating-product camera-float">
+                            <div class="float-img camera"></div>
+                            <div>
+                                <strong>Canon EOS</strong>
+                                <p>£420</p>
+                            </div>
+                            <button><i class="bi bi-heart"></i></button>
+                        </div>
+
+                        <div class="floating-product gaming-float">
+                            <div class="float-img gaming"></div>
+                            <div>
+                                <strong>PS5 Console</strong>
+                                <p>£350</p>
+                            </div>
+                            <button><i class="bi bi-heart"></i></button>
+                        </div>
+
+                        <div class="floating-product shoes-float">
+                            <div class="float-img shoes-img"></div>
+                            <div>
+                                <strong>Nike Sneakers</strong>
+                                <p>£95</p>
+                            </div>
+                            <button><i class="bi bi-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="category-cards">
+            <a href="{% url 'listing_list' %}" class="category-card active">
+                <i class="bi bi-grid"></i>
+                <span>All</span>
+            </a>
+
+            <a href="{% url 'listing_list' %}?category=electronics" class="category-card">
+                <i class="bi bi-phone"></i>
+                <span>Electronics</span>
+            </a>
+
+            <a href="{% url 'listing_list' %}?category=gaming" class="category-card">
+                <i class="bi bi-controller"></i>
+                <span>Gaming</span>
+            </a>
+
+            <a href="{% url 'listing_list' %}?category=fashion" class="category-card">
+                <i class="bi bi-bag"></i>
+                <span>Fashion</span>
+            </a>
+
+            <a href="{% url 'listing_list' %}?category=home" class="category-card">
+                <i class="bi bi-house"></i>
+                <span>Home</span>
+            </a>
+
+            <a href="{% url 'listing_list' %}?category=books" class="category-card">
+                <i class="bi bi-book"></i>
+                <span>Books</span>
+            </a>
+        </section>
+
+        <div class="section-title">
+            <h2>Featured listings</h2>
+            <a href="#">View all <i class="bi bi-arrow-right"></i></a>
+        </div>
+
+        <section class="products products-upgraded">
+            {% for listing in latest_listings %}
+                <article class="product-card {% if listing.is_sold %}sold{% endif %}">
+
+                    <a href="{% url 'listing_detail' listing.id %}" class="product-link">
+                        {% if listing.is_sold %}
+                            <span class="sold-badge">Sold</span>
+                        {% elif listing.is_featured %}
+                            <span class="featured">Featured</span>
+                        {% endif %}
+
+                        {% if listing.image %}
+                            <img src="{{ listing.image.url }}" class="product-photo" alt="{{ listing.title }}">
+                        {% else %}
+                            <div class="product-img laptop"></div>
+                        {% endif %}
+
+                        <div class="product-info">
+                            <h3>£{{ listing.price }}</h3>
+                            <p>{{ listing.title }}</p>
+                            <small>{{ listing.location }} · {{ listing.created_at|timesince }} ago</small>
+                        </div>
+                    </a>
+
+                    <form method="POST" action="{% url 'toggle_wishlist' listing.id %}" class="wishlist-form">
+                        {% csrf_token %}
+                        <button class="heart-btn" type="submit">
+                            {% if listing.id in saved_listing_ids %}
+                                <i class="bi bi-heart-fill"></i>
+                            {% else %}
+                                <i class="bi bi-heart"></i>
+                            {% endif %}
+                        </button>
+                    </form>
+
+                </article>
+            {% empty %}
+                <div class="empty-state">
+                    <h2>No listings yet.</h2>
+                    <p>Start the marketplace by creating the first listing.</p>
+                    <a href="{% url 'listing_create' %}" class="btn primary-btn">Sell an item</a>
+                </div>
+            {% endfor %}
+        </section>
+
+        <section class="stats-row">
+            <div>
+                <h3>12K+</h3>
+                <p>Active listings</p>
+            </div>
+
+            <div>
+                <h3>4.9★</h3>
+                <p>Seller rating</p>
+            </div>
+
+            <div>
+                <h3>Secure</h3>
+                <p>Stripe payments</p>
+            </div>
+
+            <div>
+                <h3>Local</h3>
+                <p>Pickup deals</p>
+            </div>
+        </section>
+
+        <section class="how-section">
+            <div class="section-title">
+                <h2>How Swoop works</h2>
+            </div>
+
+            <div class="how-grid">
+                <div class="how-card">
+                    <i class="bi bi-camera"></i>
+                    <h3>List it</h3>
+                    <p>Upload photos, add a price, and publish your item in minutes.</p>
+                </div>
+
+                <div class="how-card">
+                    <i class="bi bi-search-heart"></i>
+                    <h3>Find it</h3>
+                    <p>Browse local items, save favourites, and discover great deals.</p>
+                </div>
+
+                <div class="how-card">
+                    <i class="bi bi-credit-card"></i>
+                    <h3>Swoop it</h3>
+                    <p>Buy safely using Stripe test checkout and complete the deal.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="seller-banner">
+            <div>
+                <span class="badge-soft">Start selling</span>
+                <h2>Turn unused items into cash.</h2>
+                <p>Create a listing for free, then boost it with Stripe to get more views.</p>
+            </div>
+
+            <a href="{% url 'listing_create' %}" class="btn primary-btn">Start selling</a>
+        </section>
+
+    </div>
+</section>
+
+{% endblock %}

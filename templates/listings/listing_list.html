@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<section class="page">
+    <div class="container">
+
+        <div class="browse-header">
+            <div>
+                <span class="badge-soft">Browse marketplace</span>
+                <h1>Find your next deal.</h1>
+                <p>Search local listings, filter by category, and swoop before it is gone.</p>                <p class="results-count">{{ listings.count }} result{{ listings.count|pluralize }} found</p>
+                {% if query or category_slug or condition or max_price %}
+                    <a href="{% url 'listing_list' %}" class="clear-search-link">Clear search & filters</a>
+                {% endif %}
+            </div>
+
+            <form method="GET" action="{% url 'listing_list' %}" class="browse-search">
+                <i class="bi bi-search"></i>
+                <input type="text" name="q" value="{{ query }}" placeholder="Search listings...">
+                <button type="submit" class="search-submit">Search</button>
+            </form>
+        </div>
+
+        <div class="browse-layout">
+            <aside class="filter-panel">
+                <form method="GET" action="{% url 'listing_list' %}">
+                    <h3>Filters</h3>
+
+                    <input type="hidden" name="q" value="{{ query }}">
+
+                    <label>Sort by</label>
+                    <select name="sort">
+                        <option value="featured" {% if sort == "featured" %}selected{% endif %}>Featured first</option>
+                        <option value="newest" {% if sort == "newest" %}selected{% endif %}>Newest</option>
+                        <option value="price_low" {% if sort == "price_low" %}selected{% endif %}>Price: low to high</option>
+                        <option value="price_high" {% if sort == "price_high" %}selected{% endif %}>Price: high to low</option>
+                    </select>
+
+                    <label>Category</label>
+                    <select name="category">
+                        <option value="">All categories</option>
+                        {% for category in categories %}
+                            <option value="{{ category.slug }}" {% if category_slug == category.slug %}selected{% endif %}>
+                                {{ category.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+
+                    <label>Condition</label>
+                    <select name="condition">
+                        <option value="">Any condition</option>
+                        <option value="new" {% if condition == "new" %}selected{% endif %}>New</option>
+                        <option value="like_new" {% if condition == "like_new" %}selected{% endif %}>Like new</option>
+                        <option value="good" {% if condition == "good" %}selected{% endif %}>Good</option>
+                        <option value="used" {% if condition == "used" %}selected{% endif %}>Used</option>
+                    </select>
+
+                    <label>Max price</label>
+                    <input type="number" name="max_price" value="{{ max_price }}" placeholder="e.g. 500">
+
+                    <button class="btn primary-btn w-100" type="submit">Apply filters</button>
+
+                    <a href="{% url 'listing_list' %}" class="clear-filters">
+                        Clear filters
+                    </a>
+                </form>
+            </aside>
+
+            <section class="products products-upgraded">
+
+                {% for listing in listings %}
+                    <article class="product-card {% if listing.is_sold %}sold{% endif %}">
+
+                        <a href="{% url 'listing_detail' listing.id %}" class="product-link">
+                            {% if listing.is_sold %}
+                                <span class="sold-badge">Sold</span>
+                            {% elif listing.is_featured %}
+                                <span class="featured">Featured</span>
+                            {% endif %}
+
+                            {% if listing.image %}
+                                <img src="{{ listing.image.url }}" class="product-photo" alt="{{ listing.title }}">
+                            {% else %}
+                                <div class="product-img laptop"></div>
+                            {% endif %}
+
+                            <div class="product-info">
+                                <h3>£{{ listing.price }}</h3>
+                                <p>{{ listing.title }}</p>
+                                <small>{{ listing.location }} · {{ listing.created_at|timesince }} ago</small>
+                            </div>
+                        </a>
+
+                        <form method="POST" action="{% url 'toggle_wishlist' listing.id %}" class="wishlist-form">
+                            {% csrf_token %}
+                            <button class="heart-btn wishlist-btn" type="submit">
+                                {% if listing.id in saved_listing_ids %}
+                                    <i class="bi bi-heart-fill"></i>
+                                {% else %}
+                                    <i class="bi bi-heart"></i>
+                                {% endif %}
+                            </button>
+                        </form>
+
+                    </article>
+                {% empty %}
+                    <div class="empty-state">
+                        <h2>No listings found.</h2>
+                        <p>Try changing your search or filters.</p>
+                        <a href="{% url 'listing_create' %}" class="btn primary-btn">Sell an item</a>
+                    </div>
+                {% endfor %}
+
+            </section>
+
+            {% if page_obj.has_other_pages %}
+                <div class="pagination-wrap">
+                    {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}&q={{ query }}&category={{ category_slug }}&condition={{ condition }}&max_price={{ max_price }}&sort={{ sort }}" class="btn secondary-btn">
+                            Previous
+                        </a>
+                    {% endif %}
+
+                    <span class="page-count">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}&q={{ query }}&category={{ category_slug }}&condition={{ condition }}&max_price={{ max_price }}&sort={{ sort }}" class="btn primary-btn">
+                            Next
+                        </a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

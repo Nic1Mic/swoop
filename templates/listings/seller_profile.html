@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<section class="page">
+    <div class="container">
+
+        <div class="seller-profile-header">
+            <div class="seller-profile-avatar">
+                {{ seller.username|first|upper }}
+            </div>
+
+            <div>
+                <span class="badge-soft">Swoop seller</span>
+                <h1>{{ seller.username }}</h1>
+                <p>
+                    Joined {{ seller.date_joined|date:"F Y" }} ·
+                    {{ seller_listings.count }} listing{{ seller_listings.count|pluralize }}
+                </p>
+            </div>
+        </div>
+
+        <div class="section-title">
+            <h2>{{ seller.username }}'s listings</h2>
+        </div>
+
+        <section class="products products-upgraded">
+            {% for listing in seller_listings %}
+                <a href="{% url 'listing_detail' listing.id %}" class="product-card product-link">
+
+                    {% if listing.image %}
+                        <img src="{{ listing.image.url }}" class="product-photo" alt="{{ listing.title }}">
+                    {% else %}
+                        <div class="product-img laptop"></div>
+                    {% endif %}
+
+                    <div class="product-info">
+                        <h3>£{{ listing.price }}</h3>
+                        <p>{{ listing.title }}</p>
+                        <small>{{ listing.location }} · {{ listing.created_at|timesince }} ago</small>
+                    </div>
+                </a>
+            {% empty %}
+                <div class="empty-state">
+                    <h2>No listings yet.</h2>
+                    <p>This seller has not posted any items yet.</p>
+                </div>
+            {% endfor %}
+        </section>
+
+    </div>
+</section>
+
+{% endblock %}

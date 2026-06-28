@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<section class="page">
+    <div class="container">
+
+        <div class="dashboard-header">
+            <div>
+                <span class="badge-soft">Saved items</span>
+                <h1>Your wishlist.</h1>
+                <p>All the listings you have saved in one place.</p>
+            </div>
+        </div>
+
+        <section class="products products-upgraded">
+            {% for item in wishlist_items %}
+                {% with listing=item.listing %}
+                    <a href="{% url 'listing_detail' listing.id %}" class="product-card product-link">
+
+                        {% if listing.image %}
+                            <img src="{{ listing.image.url }}" class="product-photo" alt="{{ listing.title }}">
+                        {% else %}
+                            <div class="product-img laptop"></div>
+                        {% endif %}
+
+                        <form method="POST" action="{% url 'toggle_wishlist' listing.id %}">
+                            {% csrf_token %}
+                            <button class="heart-btn" type="submit">
+                                <i class="bi bi-heart-fill"></i>
+                            </button>
+                        </form>
+
+                        <div class="product-info">
+                            <h3>£{{ listing.price }}</h3>
+                            <p>{{ listing.title }}</p>
+                            <small>{{ listing.location }} · {{ listing.created_at|timesince }} ago</small>
+                        </div>
+                    </a>
+                {% endwith %}
+            {% empty %}
+                <div class="empty-state">
+                    <h2>Your wishlist is empty.</h2>
+                    <p>Save listings you like and come back to them later.</p>
+                    <a href="{% url 'listing_list' %}" class="btn primary-btn">Browse listings</a>
+                </div>
+            {% endfor %}
+        </section>
+
+    </div>
+</section>
+
+{% endblock %}
