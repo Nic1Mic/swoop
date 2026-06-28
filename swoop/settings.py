@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     'listings',
     'orders',
     'payments',
+    "cloudinary_storage",
+    "cloudinary",
 ]
 
 MIDDLEWARE = [
@@ -161,3 +163,11 @@ DATABASES["default"] = dj_database_url.config(
     default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
     conn_max_age=600,
 )
+
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": os.getenv("CLOUDINARY_CLOUD_NAME"),
+    "API_KEY": os.getenv("CLOUDINARY_API_KEY"),
+    "API_SECRET": os.getenv("CLOUDINARY_API_SECRET"),
+}
+
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
