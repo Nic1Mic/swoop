@@ -38,6 +38,11 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1", ".herokuapp.com"]
 # Application definition
 
 INSTALLED_APPS = [
+
+     "cloudinary_storage",
+    "cloudinary",
+
+
     # Django apps
     'django.contrib.admin',
     'django.contrib.auth',
@@ -52,8 +57,7 @@ INSTALLED_APPS = [
     'listings',
     'orders',
     'payments',
-    "cloudinary_storage",
-    "cloudinary",
+    
 ]
 
 MIDDLEWARE = [
@@ -170,4 +174,11 @@ CLOUDINARY_STORAGE = {
     "API_SECRET": os.getenv("CLOUDINARY_API_SECRET"),
 }
 
-DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
