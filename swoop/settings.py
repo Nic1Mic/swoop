@@ -172,3 +172,12 @@ DATABASES["default"] = dj_database_url.config(
 )
 
 WHITENOISE_USE_FINDERS = True
+
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
