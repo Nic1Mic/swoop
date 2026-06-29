@@ -137,6 +137,7 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "static"]
+WHITENOISE_USE_FINDERS = True
 
 # Media files via Cloudinary
 MEDIA_URL = "/media/"
@@ -147,32 +148,6 @@ CLOUDINARY_STORAGE = {
     "API_SECRET": os.getenv("CLOUDINARY_API_SECRET"),
 }
 
-DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
-STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
-
-STRIPE_PUBLIC_KEY = os.getenv("STRIPE_PUBLIC_KEY")
-STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
-SITE_URL = os.getenv("SITE_URL", "http://127.0.0.1:8000")
-PROMOTE_PRICE = int(os.getenv("PROMOTE_PRICE", 299))
-
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-DEFAULT_FROM_EMAIL = "Swoop <noreply@swoop.local>"
-LOGIN_URL = "/admin/login/"
-LOGIN_REDIRECT_URL = "/listings/dashboard/"
-LOGOUT_REDIRECT_URL = "/"
-
-
-LOGIN_URL = "/accounts/login/"
-LOGIN_REDIRECT_URL = "/listings/dashboard/"
-LOGOUT_REDIRECT_URL = "/"
-
-DATABASES["default"] = dj_database_url.config(
-    default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
-    conn_max_age=600,
-)
-
-WHITENOISE_USE_FINDERS = True
-
 STORAGES = {
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
@@ -181,3 +156,26 @@ STORAGES = {
         "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
+
+# Stripe
+STRIPE_PUBLIC_KEY = os.getenv("STRIPE_PUBLIC_KEY")
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
+SITE_URL = os.getenv("SITE_URL", "http://127.0.0.1:8000")
+PROMOTE_PRICE = int(os.getenv("PROMOTE_PRICE", 299))
+
+# Email
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = "Swoop <noreply@swoop.local>"
+
+# Auth redirects
+LOGIN_URL = "/accounts/login/"
+LOGIN_REDIRECT_URL = "/listings/dashboard/"
+LOGOUT_REDIRECT_URL = "/"
+
+# Database
+DATABASES["default"] = dj_database_url.config(
+    default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+    conn_max_age=600,
+)
+
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
