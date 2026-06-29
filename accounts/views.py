@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
+from django.core.mail import send_mail
 from django.shortcuts import redirect, render
 
 
@@ -27,6 +28,16 @@ def register_view(request):
     if request.method == "POST" and form.is_valid():
         user = form.save()
         login(request, user)
+
+        if user.email:
+            send_mail(
+                "Welcome to Swoop",
+                f"Hi {user.username},\n\nWelcome to Swoop! You can now buy, sell, wishlist, and promote listings.\n\nThanks for joining us.",
+                None,
+                [user.email],
+                fail_silently=True,
+            )
+
         return redirect("dashboard")
 
     return render(request, "accounts/register.html", {"form": form})

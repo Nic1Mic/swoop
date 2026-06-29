@@ -274,7 +274,16 @@ def buy_success(request, pk):
                 message=f"Hi {request.user.username},\n\nYou successfully purchased '{listing.title}' for £{listing.price}.\n\nThanks for using Swoop!",
                 from_email=None,
                 recipient_list=[request.user.email],
-                fail_silently=False,
+                fail_silently=True,
+            )
+
+        if listing.seller.email:
+            send_mail(
+                subject="Your item sold on Swoop",
+                message=f"Hi {listing.seller.username},\n\nYour listing '{listing.title}' has been sold for £{listing.price}.\n\nBuyer: {request.user.username}\n\nPlease arrange the next steps with the buyer.",
+                from_email=None,
+                recipient_list=[listing.seller.email],
+                fail_silently=True,
             )
 
     return render(request, "listings/buy_success.html", {"listing": listing})
