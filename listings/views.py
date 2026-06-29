@@ -161,13 +161,19 @@ def seller_profile(request, username):
 
     seller = get_object_or_404(User, username=username)
     seller_listings = Listing.objects.filter(seller=seller)
+    active_listings = seller_listings.filter(is_sold=False)
+    sold_count = seller_listings.filter(is_sold=True).count()
+    featured_count = seller_listings.filter(is_featured=True).count()
 
     return render(
         request,
         "listings/seller_profile.html",
         {
             "seller": seller,
-            "seller_listings": seller_listings,
+            "seller_listings": active_listings,
+            "total_count": seller_listings.count(),
+            "sold_count": sold_count,
+            "featured_count": featured_count,
         },
     )
 

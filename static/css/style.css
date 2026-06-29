@@ -1912,3 +1912,42 @@ a.heart-btn:hover {
         grid-column: 1;
     }
 }
+
+.seller-stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 34px;
+}
+
+.seller-stats-row div {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 26px;
+    box-shadow: 0 12px 28px rgba(17, 24, 39, 0.04);
+    text-align: center;
+}
+
+.seller-stats-row h3 {
+    color: var(--primary);
+    font-weight: 800;
+    font-size: 2rem;
+}
+
+.seller-stats-row p {
+    color: var(--muted);
+    font-weight: 700;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .seller-profile-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .seller-stats-row {
+        grid-template-columns: 1fr 1fr;
+    }
+}

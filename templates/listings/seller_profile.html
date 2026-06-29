@@ -15,35 +15,64 @@
                 <h1>{{ seller.username }}</h1>
                 <p>
                     Joined {{ seller.date_joined|date:"F Y" }} ·
-                    {{ seller_listings.count }} listing{{ seller_listings.count|pluralize }}
+                    {{ total_count }} listing{{ total_count|pluralize }}
                 </p>
             </div>
         </div>
 
+        <section class="seller-stats-row">
+            <div>
+                <h3>{{ total_count }}</h3>
+                <p>Total listings</p>
+            </div>
+
+            <div>
+                <h3>{{ seller_listings.count }}</h3>
+                <p>Active listings</p>
+            </div>
+
+            <div>
+                <h3>{{ featured_count }}</h3>
+                <p>Featured listings</p>
+            </div>
+
+            <div>
+                <h3>{{ sold_count }}</h3>
+                <p>Sold listings</p>
+            </div>
+        </section>
+
         <div class="section-title">
-            <h2>{{ seller.username }}'s listings</h2>
+            <h2>{{ seller.username }}'s active listings</h2>
+            <a href="{% url 'listing_list' %}">Browse all <i class="bi bi-arrow-right"></i></a>
         </div>
 
         <section class="products products-upgraded">
             {% for listing in seller_listings %}
-                <a href="{% url 'listing_detail' listing.id %}" class="product-card product-link">
+                <article class="product-card {% if listing.is_sold %}sold{% endif %}">
+                    <a href="{% url 'listing_detail' listing.id %}" class="product-link">
 
-                    {% if listing.image %}
-                        <img src="{{ listing.image.url }}" class="product-photo" alt="{{ listing.title }}">
-                    {% else %}
-                        <div class="product-img laptop"></div>
-                    {% endif %}
+                        {% if listing.is_featured %}
+                            <span class="featured">Featured</span>
+                        {% endif %}
 
-                    <div class="product-info">
-                        <h3>£{{ listing.price }}</h3>
-                        <p>{{ listing.title }}</p>
-                        <small>{{ listing.location }} · {{ listing.created_at|timesince }} ago</small>
-                    </div>
-                </a>
+                        {% if listing.image %}
+                            <img src="{{ listing.image.url }}" class="product-photo" alt="{{ listing.title }}">
+                        {% else %}
+                            <div class="product-img laptop"></div>
+                        {% endif %}
+
+                        <div class="product-info">
+                            <h3>£{{ listing.price }}</h3>
+                            <p>{{ listing.title }}</p>
+                            <small>{{ listing.location }} · {{ listing.created_at|timesince }} ago</small>
+                        </div>
+                    </a>
+                </article>
             {% empty %}
                 <div class="empty-state">
-                    <h2>No listings yet.</h2>
-                    <p>This seller has not posted any items yet.</p>
+                    <h2>No active listings.</h2>
+                    <p>This seller does not have any active listings right now.</p>
                 </div>
             {% endfor %}
         </section>
