@@ -134,16 +134,24 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/6.0/howto/static-files/
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
-STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [
-    BASE_DIR / 'static',
+    BASE_DIR / "static",
 ]
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+# Media files via Cloudinary
+MEDIA_URL = "/media/"
+
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": os.getenv("CLOUDINARY_CLOUD_NAME"),
+    "API_KEY": os.getenv("CLOUDINARY_API_KEY"),
+    "API_SECRET": os.getenv("CLOUDINARY_API_SECRET"),
+}
+
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 
 STRIPE_PUBLIC_KEY = os.getenv("STRIPE_PUBLIC_KEY")
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
@@ -171,14 +179,3 @@ CLOUDINARY_STORAGE = {
     "API_KEY": os.getenv("CLOUDINARY_API_KEY"),
     "API_SECRET": os.getenv("CLOUDINARY_API_SECRET"),
 }
-
-STORAGES = {
-    "default": {
-        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
-    },
-    "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
-    },
-}
-
-STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
