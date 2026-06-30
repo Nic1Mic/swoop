@@ -84,6 +84,7 @@
         </section>
 
         <section class="category-cards">
+            <h2 class="visually-hidden">Browse Categories</h2>
             <a href="{% url 'listing_list' %}" class="category-card active">
                 <i class="bi bi-grid"></i>
                 <span>All</span>
@@ -121,6 +122,7 @@
         </div>
 
         <section class="products products-upgraded">
+            <h2 class="visually-hidden">Featured Listings</h2>
             {% for listing in latest_listings %}
                 <article class="product-card {% if listing.is_sold %}sold{% endif %}">
 
@@ -166,6 +168,7 @@
         </section>
 
         <section class="stats-row">
+            <h2 class="visually-hidden">Marketplace Statistics</h2>
             <div>
                 <h3>12K+</h3>
                 <p>Active listings</p>
