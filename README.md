@@ -48,6 +48,7 @@ Swoop is a fully functional marketplace built with Django where users can purcha
 This application was developed to provide a basic demonstration of the functionalities of modern-day marketplaces and the usage of current-day technologies in web development and deployments. Several third-party cloud services such as Stripe, Cloudinary, Gmail SMTP, and Heroku have been used in the creation of this application.
 
 The focus during development was on developing clean code, adhering to Django best practices, securing the application through authentication, separation of the development and production environment using environment variables, and building a scalable application architecture.
+
 ---
 
 ## Purpose
@@ -715,6 +716,13 @@ The wireframes helped establish:
 ![Dashboard](images/wireframes/dashboard.png)
 
 ---
+
+## Authentification Wireframe
+
+![Dashboard](images/wireframes/authentification.png)
+
+---
+
 
 # Final User Interface
 
